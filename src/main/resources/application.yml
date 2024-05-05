@@ -1,0 +1,29 @@
+#Spring Boot Configuration
+server:
+  port: 7777
+spring:
+  jackson:
+    default-property-inclusion: non-null
+  main:
+    banner-mode: "off"
+
+kafka:
+  parameters:
+    bootstrap.servers: localhost:9092
+    enable.auto.commit: false
+    auto.offset.reset: latest
+    session.timeout.ms: 300000
+    concurrency: 1
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    poll.interval: 180000
+    poll.records: 100
+     
+#Log parameters
+logging:
+  file: logs/consumer
+  logLevel: INFO
+  maxFileSize: 5MB
+  maxHistory: 1
+  totalSizeCap: 100MB
+  config: classpath:logback-spring.xml

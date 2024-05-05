@@ -1,0 +1,40 @@
+<configuration scan="true" scanPeriod="30 seconds" debug="true">
+	<property resource="application.yml" />
+	<springProperty name="filePath" source="logging.file" />
+	<springProperty name="LOG_LEVEL" source="logging.logLevel" />
+	<springProperty name="MAX_FILE_SIZE" source="logging.maxFileSize" />
+	<springProperty name="MAX_HISTORY" source="logging.maxHistory" />
+	<springProperty name="TOTAL_SIZE_CAP" source="logging.totalSizeCap" />
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    	<resetJUL>true</resetJUL>
+  	</contextListener>
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d [%thread] %-5level %-50logger{40} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${filePath}.log</file>
+		<encoder>
+			<pattern>%d [%thread] %-5level %-50logger{40} - %msg%n</pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${filePath}-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+	</appender>
+	<logger name="org.mongodb.driver.cluster" level="OFF" />
+	<logger name="org.dozer.DozerBeanMapper" level="OFF" />
+	<root level="${LOG_LEVEL}">
+		<appender-ref ref="Console" />
+		<appender-ref ref="RollingFile" />
+	</root>
+</configuration>
